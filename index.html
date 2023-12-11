@@ -1,8 +1,16 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="zh-Hant-TW">
   <head>
     <title>猜數字遊戲</title>
     <meta charset="utf-8" />
+    <style>
+      /* Add some basic styling for the reveal button */
+      #revealButton {
+        margin-top: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
     <h1>猜數字遊戲</h1>
@@ -10,7 +18,10 @@
     <input type="text" id="guessField" />
     <input type="submit" value="猜!" id="guessSubmit" />
     <p class="message"></p>
-    <p id="guessCount">猜測次數: 0</p>
+    <p id="guessCount">目前猜測次數: 0</p>
+
+    <!-- Add the reveal button -->
+    <button id="revealButton">揭曉答案</button>
 
     <script>
       // Random number
@@ -23,12 +34,14 @@
       const message = document.querySelector(".message");
       const guessCountElement = document.getElementById("guessCount");
       const guessRangeElement = document.getElementById("guessRange");
+      const revealButton = document.getElementById("revealButton");
 
       // Variables
       let correctGuessCount = 0;
 
-      // Event listener
+      // Event listeners
       guessSubmit.addEventListener("click", checkGuess);
+      revealButton.addEventListener("click", revealAnswer);
 
       // Guess function
       function checkGuess() {
@@ -40,6 +53,7 @@
           message.textContent = `恭喜你，你猜對了！你這次猜了 ${correctGuessCount} 次哦~`;
           message.style.color = "green";
           guessSubmit.disabled = true;
+          revealButton.disabled = true;
         } else if (userGuess < targetNumber) {
           correctGuessCount++;
           message.textContent = "太小了，再試一次。";
@@ -58,6 +72,14 @@
 
         guessField.value = "";
         guessField.focus();
+      }
+
+      // Function to reveal the answer
+      function revealAnswer() {
+        message.textContent = `本次遊戲的答案是: ${targetNumber}`;
+        message.style.color = "blue";
+        guessSubmit.disabled = true;
+        revealButton.disabled = true;
       }
     </script>
   </body>
