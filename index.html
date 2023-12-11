@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant-TW">
   <head>
     <title>猜數字遊戲</title>
@@ -18,7 +18,7 @@
     <input type="text" id="guessField" />
     <input type="submit" value="猜!" id="guessSubmit" />
     <p class="message"></p>
-    <p id="guessCount">目前猜測次數: 0</p>
+    <p id="guessCount">猜測次數: 0</p>
 
     <!-- Add the reveal button -->
     <button id="revealButton">揭曉答案</button>
@@ -38,6 +38,7 @@
 
       // Variables
       let correctGuessCount = 0;
+      let remainingAttempts = 5; // Maximum allowed attempts
 
       // Event listeners
       guessSubmit.addEventListener("click", checkGuess);
@@ -69,6 +70,14 @@
 
         // Update guess range
         guessRangeElement.textContent = `目前猜測範圍: 1 到 100`;
+
+        // Check for failure condition
+        if (correctGuessCount >= 5 && userGuess !== targetNumber) {
+          message.textContent = `You Failed! 答案是 ${targetNumber}`;
+          message.style.color = "red";
+          guessSubmit.disabled = true;
+          revealButton.disabled = true;
+        }
 
         guessField.value = "";
         guessField.focus();
