@@ -17,15 +17,14 @@
     <p>目前猜測範圍: <span id="guessRange">1 到 100</span></p>
     <input type="text" id="guessField" />
     <input type="submit" value="猜!" id="guessSubmit" />
+    <button id="revealButton">揭曉答案</button>
+    <button id="playAgainButton">再玩一次</button>
     <p class="message"></p>
     <p id="guessCount">猜測次數: 0</p>
 
-    <!-- Add the reveal button -->
-    <button id="revealButton">揭曉答案</button>
-
     <script>
       // Random number
-      const targetNumber = Math.floor(Math.random() * 100) + 1;
+      let targetNumber = Math.floor(Math.random() * 100) + 1;
       console.log("answer: " + targetNumber);
 
       // Get elements
@@ -35,14 +34,15 @@
       const guessCountElement = document.getElementById("guessCount");
       const guessRangeElement = document.getElementById("guessRange");
       const revealButton = document.getElementById("revealButton");
+      const playAgainButton = document.getElementById("playAgainButton");
 
       // Variables
       let correctGuessCount = 0;
-      let remainingAttempts = 5; // Maximum allowed attempts
 
       // Event listeners
       guessSubmit.addEventListener("click", checkGuess);
       revealButton.addEventListener("click", revealAnswer);
+      playAgainButton.addEventListener("click", playAgain);
 
       // Guess function
       function checkGuess() {
@@ -89,6 +89,38 @@
         message.style.color = "blue";
         guessSubmit.disabled = true;
         revealButton.disabled = true;
+      }
+
+      // Play again function
+      function playAgain() {
+        // Enable guess submit button
+        guessSubmit.disabled = false;
+
+        // Enable reveal button
+        revealButton.disabled = false;
+
+        // Reset guess count
+        correctGuessCount = 0;
+        guessCountElement.textContent = `猜測次數: ${correctGuessCount}`;
+
+        // Clear message
+        message.textContent = "";
+
+        // Hide previous revealed answer
+        targetNumberElement.textContent = "";
+
+        // Enable guess field
+        guessField.disabled = false;
+
+        // Generate a new random number for the next round
+        targetNumber = Math.floor(Math.random() * 100) + 1;
+        console.log("New answer: " + targetNumber);
+
+        // Update guess range
+        guessRangeElement.textContent = `目前猜測範圍: 1 到 100`;
+
+        guessField.value = "";
+        guessField.focus();
       }
     </script>
   </body>
