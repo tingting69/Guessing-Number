@@ -21,6 +21,7 @@
     <button id="playAgainButton">再玩一次</button>
     <p class="message"></p>
     <p id="guessCount">猜測次數: 0</p>
+    <p id="second" style="display: none;">倒數計時: 5</p>
 
     <script>
       // Random number
@@ -35,9 +36,12 @@
       const guessRangeElement = document.getElementById("guessRange");
       const revealButton = document.getElementById("revealButton");
       const playAgainButton = document.getElementById("playAgainButton");
+      const secondElement = document.getElementById("second");
 
       // Variables
       let correctGuessCount = 0;
+      let countdown;
+      let countdownInterval;
 
       // Event listeners
       guessSubmit.addEventListener("click", checkGuess);
@@ -64,9 +68,6 @@
         // Clear message
         message.textContent = "";
 
-        // Hide previous revealed answer
-        targetNumberElement.textContent = "";
-
         // Enable guess field
         guessField.disabled = false;
 
@@ -79,6 +80,32 @@
 
         guessField.value = "";
         guessField.focus();
+
+        // Reset countdown
+        countdown = 5;
+        display(countdown);
+
+        // Clear previous interval
+        clearInterval(countdownInterval);
+
+        // Hide countdown element
+        secondElement.style.display = "none";
+
+        // Reset button states
+        guessSubmit.disabled = false;
+        revealButton.disabled = false;
+      }
+
+      // Function to display the result
+      function display(result) {
+        // Check for failure condition
+        if (result > 0 && result <= 5 && correctGuessCount >= 5) {
+          secondElement.style.display = "block";
+          secondElement.textContent = `倒數計時: ${result}`;
+        } else {
+          // Countdown finished, disable guess button
+          guessSubmit.disabled = true;
+        }
       }
 
       // Guess function
@@ -110,10 +137,12 @@
 
         // Check for failure condition
         if (correctGuessCount >= 5 && userGuess !== targetNumber) {
-          message.textContent = `You Failed! 答案是 ${targetNumber}`;
-          message.style.color = "red";
-          guessSubmit.disabled = true;
-          revealButton.disabled = true;
+          // Start countdown using delayedDisplay
+          delayedDisplay("5", 0, display);
+          delayedDisplay("4", 1000, display);
+          delayedDisplay("3", 2000, display);
+          delayedDisplay("2", 3000, display);
+          delayedDisplay("1", 4000, display);
 
           // Automatically play again after 5 seconds
           setTimeout(autoPlayAgain, 5000);
@@ -129,6 +158,14 @@
         message.style.color = "blue";
         guessSubmit.disabled = true;
         revealButton.disabled = true;
+      }
+
+      // Delayed display function
+      function delayedDisplay(string, ms, callback) {
+        setTimeout(function () {
+          countdown = string;
+          callback(countdown);
+        }, ms);
       }
     </script>
   </body>
