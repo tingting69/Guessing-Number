@@ -44,6 +44,43 @@
       revealButton.addEventListener("click", revealAnswer);
       playAgainButton.addEventListener("click", playAgain);
 
+      // Function to automatically play again after 5 seconds
+      function autoPlayAgain() {
+        playAgain();
+      }
+
+      // Play again function
+      function playAgain() {
+        // Enable guess submit button
+        guessSubmit.disabled = false;
+
+        // Enable reveal button
+        revealButton.disabled = false;
+
+        // Reset guess count
+        correctGuessCount = 0;
+        guessCountElement.textContent = `猜測次數: ${correctGuessCount}`;
+
+        // Clear message
+        message.textContent = "";
+
+        // Hide previous revealed answer
+        targetNumberElement.textContent = "";
+
+        // Enable guess field
+        guessField.disabled = false;
+
+        // Generate a new random number for the next round
+        targetNumber = Math.floor(Math.random() * 100) + 1;
+        console.log("New answer: " + targetNumber);
+
+        // Update guess range
+        guessRangeElement.textContent = `目前猜測範圍: 1 到 100`;
+
+        guessField.value = "";
+        guessField.focus();
+      }
+
       // Guess function
       function checkGuess() {
         const userGuess = parseInt(guessField.value);
@@ -77,6 +114,9 @@
           message.style.color = "red";
           guessSubmit.disabled = true;
           revealButton.disabled = true;
+
+          // Automatically play again after 5 seconds
+          setTimeout(autoPlayAgain, 5000);
         }
 
         guessField.value = "";
@@ -89,38 +129,6 @@
         message.style.color = "blue";
         guessSubmit.disabled = true;
         revealButton.disabled = true;
-      }
-
-      // Play again function
-      function playAgain() {
-        // Enable guess submit button
-        guessSubmit.disabled = false;
-
-        // Enable reveal button
-        revealButton.disabled = false;
-
-        // Reset guess count
-        correctGuessCount = 0;
-        guessCountElement.textContent = `猜測次數: ${correctGuessCount}`;
-
-        // Clear message
-        message.textContent = "";
-
-        // Hide previous revealed answer
-        targetNumberElement.textContent = "";
-
-        // Enable guess field
-        guessField.disabled = false;
-
-        // Generate a new random number for the next round
-        targetNumber = Math.floor(Math.random() * 100) + 1;
-        console.log("New answer: " + targetNumber);
-
-        // Update guess range
-        guessRangeElement.textContent = `目前猜測範圍: 1 到 100`;
-
-        guessField.value = "";
-        guessField.focus();
       }
     </script>
   </body>
